@@ -97,12 +97,7 @@ export default function Navbar() {
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin">
-                      <Shield className="mr-2 h-4 w-4" />
-                      Admin Panel
-                    </Link>
-                  </DropdownMenuItem>
+
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => signOut()}>
                     Log out
