@@ -6,7 +6,9 @@ import SignUpForm from "./components/auth/SignUpForm";
 import Dashboard from "./components/pages/dashboard";
 import Success from "./components/pages/success";
 import Home from "./components/pages/home";
+import UserPage from "./components/pages/user";
 import { AuthProvider, useAuth } from "../supabase/auth";
+import { UserProvider } from "./components/user/UserContext";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -37,12 +39,8 @@ function AppRoutes() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/success"
-          element={
-            <Success />
-          }
-        />
+        <Route path="/user" element={<UserPage />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
       {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
     </>
@@ -52,9 +50,11 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Suspense fallback={<p>Loading...</p>}>
-        <AppRoutes />
-      </Suspense>
+      <UserProvider>
+        <Suspense fallback={<p>Loading...</p>}>
+          <AppRoutes />
+        </Suspense>
+      </UserProvider>
     </AuthProvider>
   );
 }

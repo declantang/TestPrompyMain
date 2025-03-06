@@ -110,7 +110,14 @@ export default function CompetitionDetailDrawer({
           </div>
 
           <DrawerFooter>
-            <Button className="w-full">Enter Competition</Button>
+            <Button
+              className="w-full"
+              onClick={() => {
+                // This would be connected to the UserContext in a real implementation
+              }}
+            >
+              Enter Competition
+            </Button>
             <DrawerClose asChild>
               <Button variant="outline">Close</Button>
             </DrawerClose>

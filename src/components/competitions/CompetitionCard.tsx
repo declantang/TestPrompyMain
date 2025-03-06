@@ -113,7 +113,15 @@ export default function CompetitionCard({
               <Info className="h-4 w-4 mr-1" />
               {isExpanded ? "Less Info" : "More Info"}
             </Button>
-            <Button size="sm">Enter Competition</Button>
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                // This would be connected to the UserContext in a real implementation
+              }}
+            >
+              Enter Competition
+            </Button>
           </CardFooter>
         </div>
       </div>
