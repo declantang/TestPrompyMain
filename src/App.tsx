@@ -6,6 +6,7 @@ import SignUpForm from "./components/auth/SignUpForm";
 import Dashboard from "./components/pages/dashboard";
 import Success from "./components/pages/success";
 import Home from "./components/pages/home";
+import Admin from "./components/pages/admin";
 import { AuthProvider, useAuth } from "../supabase/auth";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -38,11 +39,14 @@ function AppRoutes() {
           }
         />
         <Route
-          path="/success"
+          path="/admin"
           element={
-            <Success />
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
           }
         />
+        <Route path="/success" element={<Success />} />
       </Routes>
       {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
     </>
