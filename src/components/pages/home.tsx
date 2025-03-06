@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import CompetitionDirectory from "../competitions/CompetitionDirectory";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
+  const handleBrowseClick = () => {
+    navigate("/competitions");
+  };
+
+  const handleCompetitionClick = (competitionId: string) => {
+    navigate(`/competition/${competitionId}`);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col">
       <Navbar />
@@ -21,11 +32,15 @@ export default function LandingPage() {
               luck
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gap-2">
+              <Button size="lg" className="gap-2" onClick={handleBrowseClick}>
                 Browse Competitions <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline">
-                How It Works
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/dashboard")}
+              >
+                My Dashboard
               </Button>
             </div>
           </div>
@@ -62,6 +77,7 @@ export default function LandingPage() {
               <div
                 key={category.name}
                 className="relative rounded-lg overflow-hidden group cursor-pointer"
+                onClick={handleBrowseClick}
               >
                 <img
                   src={category.image}
@@ -79,10 +95,13 @@ export default function LandingPage() {
         {/* Competition Directory */}
         <div className="bg-slate-50 py-12">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-8 text-center">
-              Active Competitions
-            </h2>
-            <CompetitionDirectory />
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-3xl font-bold">Active Competitions</h2>
+              <Button onClick={handleBrowseClick} className="gap-2">
+                View All <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+            <CompetitionDirectory onParticipate={handleCompetitionClick} />
           </div>
         </div>
       </main>

@@ -6,7 +6,10 @@ import SignUpForm from "./components/auth/SignUpForm";
 import Dashboard from "./components/pages/dashboard";
 import Success from "./components/pages/success";
 import Home from "./components/pages/home";
+import Competitions from "./components/pages/competitions";
+import CompetitionDetail from "./components/pages/competition-detail";
 import { AuthProvider, useAuth } from "../supabase/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -16,7 +19,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
   return <>{children}</>;
@@ -29,6 +32,8 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/competitions" element={<Competitions />} />
+        <Route path="/competition/:id" element={<CompetitionDetail />} />
         <Route
           path="/dashboard"
           element={
@@ -37,12 +42,7 @@ function AppRoutes() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/success"
-          element={
-            <Success />
-          }
-        />
+        <Route path="/success" element={<Success />} />
       </Routes>
       {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
     </>
@@ -55,6 +55,7 @@ function App() {
       <Suspense fallback={<p>Loading...</p>}>
         <AppRoutes />
       </Suspense>
+      <Toaster />
     </AuthProvider>
   );
 }

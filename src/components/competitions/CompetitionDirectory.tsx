@@ -7,19 +7,29 @@ import CompetitionDetailDrawer from "./CompetitionDetailDrawer";
 import { Competition } from "@/types/competition";
 import { supabase } from "../../../supabase/supabase";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
-export default function CompetitionDirectory() {
+interface CompetitionDirectoryProps {
+  initialCompetitions?: Competition[];
+  onParticipate?: (competitionId: string) => void;
+}
+
+export default function CompetitionDirectory({
+  initialCompetitions,
+  onParticipate,
+}: CompetitionDirectoryProps) {
   const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [filteredCompetitions, setFilteredCompetitions] = useState<
     Competition[]
   >([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialCompetitions ? false : true);
   const [selectedCompetition, setSelectedCompetition] =
     useState<Competition | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [seedingData, setSeedingData] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [filters, setFilters] = useState<FilterOptions>({
     search: "",
@@ -29,8 +39,13 @@ export default function CompetitionDirectory() {
   });
 
   useEffect(() => {
-    fetchCompetitions();
-  }, []);
+    if (initialCompetitions) {
+      setCompetitions(initialCompetitions);
+      setFilteredCompetitions(initialCompetitions);
+    } else {
+      fetchCompetitions();
+    }
+  }, [initialCompetitions]);
 
   const fetchCompetitions = async () => {
     try {
@@ -149,15 +164,21 @@ export default function CompetitionDirectory() {
   };
 
   const handleCompetitionClick = (competition: Competition) => {
-    setSelectedCompetition(competition);
-    setDrawerOpen(true);
+    if (onParticipate) {
+      onParticipate(competition.id);
+    } else {
+      setSelectedCompetition(competition);
+      setDrawerOpen(true);
+    }
   };
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Competition Directory</h1>
-        <div className="flex gap-2">
+        {!initialCompetitions && (
+          <h1 className="text-3xl font-bold">Competition Directory</h1>
+        )}
+        <div className="flex gap-2 ml-auto">
           <Button
             variant={layout === "grid" ? "default" : "outline"}
             size="sm"

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Trophy, Info } from "lucide-react";
+import { Calendar, Trophy, Info, ArrowRight } from "lucide-react";
 import { Competition } from "@/types/competition";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -23,7 +23,8 @@ export default function CompetitionCard({
 }: CompetitionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpand = () => {
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card click event
     setIsExpanded(!isExpanded);
   };
 
@@ -33,6 +34,10 @@ export default function CompetitionCard({
     } catch (error) {
       return dateString;
     }
+  };
+
+  const isDeadlinePassed = () => {
+    return new Date(competition.deadline) < new Date();
   };
 
   return (
@@ -52,6 +57,11 @@ export default function CompetitionCard({
           <Badge className="absolute top-2 right-2 bg-primary/90">
             {competition.type}
           </Badge>
+          {isDeadlinePassed() && (
+            <Badge className="absolute top-2 left-2 bg-slate-700/90">
+              Closed
+            </Badge>
+          )}
         </div>
 
         <div className={`${layout === "list" ? "w-3/4" : "w-full"}`}>
@@ -113,7 +123,10 @@ export default function CompetitionCard({
               <Info className="h-4 w-4 mr-1" />
               {isExpanded ? "Less Info" : "More Info"}
             </Button>
-            <Button size="sm">Enter Competition</Button>
+            <Button size="sm" className="gap-1">
+              {isDeadlinePassed() ? "View Details" : "Enter Competition"}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </CardFooter>
         </div>
       </div>

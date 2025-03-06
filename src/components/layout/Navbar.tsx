@@ -9,11 +9,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings, User, Trophy, Search, Bell } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../../supabase/auth";
 
 export default function Navbar() {
   const { user, signOut } = useAuth();
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
 
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -27,25 +32,25 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-6 ml-10">
             <Link
               to="/"
-              className="text-sm font-medium hover:text-primary transition-colors"
+              className={`text-sm font-medium transition-colors ${isActive("/") ? "text-primary" : "hover:text-primary"}`}
             >
               Home
             </Link>
             <Link
-              to="/"
-              className="text-sm font-medium hover:text-primary transition-colors"
+              to="/competitions"
+              className={`text-sm font-medium transition-colors ${isActive("/competitions") ? "text-primary" : "hover:text-primary"}`}
             >
               Competitions
             </Link>
             <Link
-              to="/"
-              className="text-sm font-medium hover:text-primary transition-colors"
+              to="/dashboard"
+              className={`text-sm font-medium transition-colors ${isActive("/dashboard") ? "text-primary" : "hover:text-primary"}`}
             >
-              Winners
+              Dashboard
             </Link>
             <Link
-              to="/"
-              className="text-sm font-medium hover:text-primary transition-colors"
+              to="/about"
+              className={`text-sm font-medium transition-colors ${isActive("/about") ? "text-primary" : "hover:text-primary"}`}
             >
               About
             </Link>
